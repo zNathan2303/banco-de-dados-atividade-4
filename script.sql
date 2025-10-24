@@ -73,3 +73,83 @@ CREATE TABLE tbl_endereco_funcionario (
     id_funcionario int not null,
     foreign key (id_funcionario) references tbl_funcionario(id_funcionario)
 );
+
+CREATE TABLE tbl_loja(
+	id_loja int primary key auto_increment,
+    cnpj varchar(20) not null,
+    razao_social varchar(100) not null,
+    ie varchar(20) not null,
+    logradouro varchar(100),
+    bairro varchar(100),
+    cidade varchar(100),
+    cep varchar(9),
+    uf varchar(2)
+);
+
+ALTER TABLE tbl_filial add column id_loja int;
+ALTER TABLE tbl_filial add foreign key (id_loja) references tbl_loja(id_loja);
+ALTER TABLE tbl_filial MODIFY id_loja int not null;
+
+desc tbl_filial;
+
+CREATE TABLE tbl_cliente(
+	id_cliente int primary key auto_increment,
+    nome varchar(100) not null,
+    cpf varchar(11) not null,
+    data_nascimento date,
+    telefone varchar(20),
+    email varchar(100),
+    renda decimal(11,2)
+);
+
+CREATE TABLE tbl_endereco_cliente (
+	id int primary key auto_increment,
+    logradouro varchar(100) not null,
+    numero varchar(20) not null,
+    bairro varchar(100) not null,
+    cidade varchar(100) not null,
+    uf varchar(2) not null,
+    cep varchar(9) not null,
+    id_cliente int not null,
+    foreign key (id_cliente) references tbl_cliente(id_cliente)
+);
+
+CREATE TABLE tbl_pedido (
+	id_pedido int primary key auto_increment,
+    data_pedido date not null,
+    total decimal(11,2) not null,
+    forma_pagamento varchar(50) not null,
+    informacoes varchar(200),
+    id_cliente int not null,
+    id_funcionario int not null,
+    foreign key (id_cliente) references tbl_cliente(id_cliente),
+    foreign key (id_funcionario) references tbl_funcionario(id_funcionario)
+);
+
+CREATE TABLE tbl_produto(
+	id_produto int primary key auto_increment,
+    nome varchar(100) not null,
+    valor decimal(11,2) not null,
+    descricao varchar(500),
+    fabricante varchar(100) not null,
+    modelo varchar(100),
+    lote varchar(30),
+    quantidade decimal(11,2) not null,
+    unidade varchar(20) not null
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

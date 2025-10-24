@@ -394,6 +394,121 @@ INSERT INTO tbl_endereco_funcionario
 -- Fim
 ;
 
+-- LISTAR OS ENDEREÇOS DOS FUNCIONÁRIOS
+SELECT f.id_funcionario, f.nome, ef.logradouro, ef.numero, ef.bairro, ef.cidade, ef.uf, ef.cep 
+FROM tbl_funcionario f JOIN tbl_endereco_funcionario ef
+ON f.id_funcionario = ef.id_funcionario;
+
+-- VIEW PARA LISTAR ENDEREÇO DOS FUNCIONÁRIOS
+CREATE VIEW view_endereco_funcionarios as
 SELECT f.nome, ef.logradouro, ef.numero, ef.bairro, ef.cidade, ef.uf, ef.cep 
-FROM tbl_funcionario f, tbl_endereco_funcionario ef
-WHERE f.id_funcionario = ef.id_funcionario;
+FROM tbl_funcionario f JOIN tbl_endereco_funcionario ef
+ON f.id_funcionario = ef.id_funcionario;
+
+select nome, cidade, uf from view_endereco_funcionarios;
+
+-- MOSTRAR TODOS OS FUNCIONÁRIOS QUE NÃO TEM ENDEREÇO CADASTRADO
+SELECT f.id_funcionario, f.nome, ef.logradouro, ef.numero, ef.bairro, ef.cidade, ef.uf, ef.cep 
+FROM tbl_funcionario f LEFT JOIN tbl_endereco_funcionario ef
+ON f.id_funcionario = ef.id_funcionario
+WHERE ef.logradouro IS NULL;
+
+-- funcionários que tem endereço: 1, 12, 14, 15, 17, 18, 20, 22, 23, 26, 27, 29, 31, 32, 34, 35
+
+CREATE VIEW view_funcionarios_sem_endereco as
+SELECT f.id_funcionario, f.nome, ef.logradouro, ef.numero, ef.bairro, ef.cidade, ef.uf, ef.cep 
+FROM tbl_funcionario f LEFT JOIN tbl_endereco_funcionario ef
+ON f.id_funcionario = ef.id_funcionario
+WHERE ef.logradouro IS NULL;
+
+SELECT id_funcionario, nome 
+FROM view_funcionarios_sem_endereco
+order by nome asc;
+
+-- APAGAR A VIEW_ENDERECO_FUNCIONARIO
+drop view view_endereco_funcionarios;
+
+select * from tbl_filial;
+select * from tbl_loja;
+
+INSERT INTO tbl_loja (
+    cnpj, razao_social, ie, logradouro, bairro, cidade, cep, uf
+) VALUES (
+    '12.345.678/0001-90',
+    'Tech Solutions LTDA',
+    '1234567890',
+    'Av. Paulista, 1000',
+    'Bela Vista',
+    'São Paulo',
+    '01310-100',
+    'SP'
+);
+
+update tbl_filial set id_loja = 1 where id_filial = 1;
+update tbl_filial set id_loja = 1 where id_filial = 2;
+
+INSERT INTO tbl_cliente (nome, cpf, data_nascimento, telefone, email, renda)
+VALUES
+('Maria Silva', '12345678901', '1990-05-12', '(11) 98877-6655', 'maria.silva@email.com', 3500.00),
+('João Pereira', '98765432100', '1985-10-23', '(21) 97766-5544', 'joao.pereira@email.com', 4800.50),
+('Ana Souza', '45678912309', '1998-02-17', '(31) 98655-4433', 'ana.souza@email.com', 2700.00),
+('Carlos Mendes', '78912345601', '1979-11-30', '(41) 98444-3322', 'carlos.mendes@email.com', 7200.00),
+('Fernanda Lima', '32165498700', '2000-08-05', '(51) 98222-1100', 'fernanda.lima@email.com', 4100.75);
+
+select * from tbl_cliente;
+
+INSERT INTO tbl_endereco_cliente (logradouro, numero, bairro, cidade, uf, cep, id_cliente)
+VALUES
+('Rua das Flores', '123', 'Jardim Primavera', 'São Paulo', 'SP', '01010-000', 1),
+('Avenida Atlântica', '456', 'Copacabana', 'Rio de Janeiro', 'RJ', '22021-001', 2),
+('Rua Minas Gerais', '789', 'Savassi', 'Belo Horizonte', 'MG', '30140-130', 3),
+('Rua das Araucárias', '55', 'Batel', 'Curitiba', 'PR', '80240-070', 4),
+('Avenida Ipiranga', '890', 'Centro Histórico', 'Porto Alegre', 'RS', '90010-001', 5);
+
+select * from tbl_endereco_cliente;
+
+select id_funcionario from tbl_funcionario;
+
+-- FALTANDO POPULAR A TBL_PEDIDO
+/*
+
+CREATE TABLE tbl_pedido (
+	id_pedido int primary key auto_increment,
+    data_pedido date not null,
+    total decimal(11,2) not null,
+    forma_pagamento varchar(50) not null,
+    informacoes varchar(200),
+    id_cliente int not null,
+    id_funcionario int not null,
+    foreign key (id_cliente) references tbl_cliente(id_cliente),
+    foreign key (id_funcionario) references tbl_funcionario(id_funcionario)
+);
+
+popule essa tabela, considerando que os id_funcionario disponiveis são:
+1, e do 12 até o 36
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
