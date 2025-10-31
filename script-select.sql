@@ -469,6 +469,8 @@ select * from tbl_endereco_cliente;
 
 select id_funcionario from tbl_funcionario;
 
+select id_pedido from tbl_pedido;
+
 -- FALTANDO POPULAR A TBL_PEDIDO
 /*
 
@@ -484,10 +486,156 @@ CREATE TABLE tbl_pedido (
     foreign key (id_funcionario) references tbl_funcionario(id_funcionario)
 );
 
-popule essa tabela, considerando que os id_funcionario disponiveis são:
-1, e do 12 até o 36
-
+popule essa tabela, considerando que: 
+os id_funcionario disponiveis são o 1, e do 12 até o 36.
+os id_cliente disponiveis são do 1 até o 5.
 */
+
+select * from tbl_cliente;
+
+select * from tbl_produto;
+
+INSERT INTO tbl_pedido (data_pedido, total, forma_pagamento, informacoes, id_cliente, id_funcionario)
+VALUES
+('2025-10-01', 1299.90, 'Cartão de Crédito', 'Compra de notebook', 1, 1),
+('2025-10-02', 89.50, 'Pix', 'Compra de acessórios', 2, 12),
+('2025-10-03', 459.99, 'Boleto', 'Compra de impressora', 3, 13),
+('2025-10-04', 199.00, 'Cartão de Débito', 'Compra de fone de ouvido', 4, 15),
+('2025-10-05', 1499.00, 'Cartão de Crédito', 'Compra de smartphone', 5, 18),
+('2025-10-06', 249.90, 'Pix', 'Compra de roteador', 2, 20),
+('2025-10-07', 59.99, 'Dinheiro', 'Compra de mouse', 1, 22),
+('2025-10-08', 89.99, 'Pix', 'Compra de teclado', 3, 25),
+('2025-10-09', 299.00, 'Cartão de Crédito', 'Compra de HD externo', 4, 27),
+('2025-10-10', 349.99, 'Cartão de Débito', 'Compra de monitor', 5, 30),
+('2025-10-11', 1799.00, 'Cartão de Crédito', 'Compra de TV', 1, 33),
+('2025-10-12', 129.99, 'Pix', 'Compra de caixa de som', 2, 35),
+('2025-10-13', 649.00, 'Boleto', 'Compra de cadeira gamer', 3, 36);
+
+select * from tbl_pedido;
+
+INSERT INTO tbl_produto (nome, valor, descricao, fabricante, modelo, lote, quantidade, unidade)
+VALUES
+('Notebook Dell Inspiron 15', 3899.90, 'Notebook com processador Intel i5, 8GB RAM e SSD de 512GB', 'Dell', 'Inspiron 15 3520', 'LT-001', 10, 'unidade'),
+('Mouse Gamer Logitech G203', 149.99, 'Mouse gamer RGB com 6 botões programáveis', 'Logitech', 'G203 Lightsync', 'LT-002', 50, 'unidade'),
+('Teclado Mecânico Redragon Kumara', 249.90, 'Teclado mecânico ABNT2 com iluminação vermelha', 'Redragon', 'K552', 'LT-003', 35, 'unidade'),
+('Monitor LG 24” Full HD', 749.00, 'Monitor de 24 polegadas com painel IPS e resolução Full HD', 'LG', '24MP400', 'LT-004', 20, 'unidade'),
+('Headset HyperX Cloud Stinger', 399.00, 'Headset gamer com microfone ajustável e conforto prolongado', 'HyperX', 'Cloud Stinger', 'LT-005', 25, 'unidade'),
+('HD Externo Seagate 1TB', 329.90, 'HD externo portátil USB 3.0', 'Seagate', 'Expansion Portable', 'LT-006', 40, 'unidade'),
+('Cadeira Gamer ThunderX3 TGC12', 1299.00, 'Cadeira ergonômica com ajuste de altura e inclinação', 'ThunderX3', 'TGC12', 'LT-007', 12, 'unidade'),
+('Smartphone Samsung Galaxy A15', 1299.99, 'Smartphone 128GB com tela Super AMOLED e câmera tripla', 'Samsung', 'Galaxy A15', 'LT-008', 30, 'unidade'),
+('Impressora HP Ink Tank 315', 849.90, 'Impressora multifuncional tanque de tinta com Wi-Fi', 'HP', 'Ink Tank 315', 'LT-009', 18, 'unidade'),
+('Roteador TP-Link Archer C6', 279.99, 'Roteador dual band gigabit com 4 antenas externas', 'TP-Link', 'Archer C6', 'LT-010', 25, 'unidade');
+
+select * from tbl_produto;
+
+INSERT INTO tbl_itens (quantidade, valor_unitario, total, id_produto, id_pedido)
+VALUES
+(1, 3899.90, 3899.90, 1, 1),  -- Notebook Dell Inspiron 15
+(2, 149.99, 299.98, 2, 2),    -- Mouse Gamer Logitech
+(1, 249.90, 249.90, 3, 3),    -- Teclado Mecânico Redragon
+(1, 749.00, 749.00, 4, 4),    -- Monitor LG 24”
+(1, 1299.99, 1299.99, 8, 5),  -- Smartphone Samsung
+(1, 329.90, 329.90, 6, 6),    -- HD Externo Seagate
+(1, 149.99, 149.99, 2, 7),    -- Mouse Gamer Logitech
+(1, 249.90, 249.90, 3, 8),    -- Teclado Mecânico Redragon
+(2, 749.00, 1498.00, 4, 9),   -- Monitores LG
+(1, 849.90, 849.90, 9, 10),   -- Impressora HP
+(1, 1299.00, 1299.00, 7, 11), -- Cadeira Gamer
+(1, 279.99, 279.99, 10, 12),  -- Roteador TP-Link
+(2, 399.00, 798.00, 5, 13);   -- Headset HyperX
+
+select * from tbl_itens;
+
+select id_filial from tbl_filial;
+
+INSERT INTO tbl_filial_produto (quantidade, id_produto, id_filial)
+VALUES
+(5, 1, 1),   -- Notebook Dell Inspiron 15 na Filial 1
+(3, 1, 2),   -- Notebook Dell Inspiron 15 na Filial 2
+
+(20, 2, 1),  -- Mouse Gamer Logitech na Filial 1
+(30, 2, 2),  -- Mouse Gamer Logitech na Filial 2
+
+(15, 3, 1),  -- Teclado Mecânico Redragon na Filial 1
+(20, 3, 2),  -- Teclado Mecânico Redragon na Filial 2
+
+(10, 4, 1),  -- Monitor LG 24" na Filial 1
+(8, 4, 2),   -- Monitor LG 24" na Filial 2
+
+(12, 5, 1),  -- Headset HyperX na Filial 1
+(13, 5, 2),  -- Headset HyperX na Filial 2
+
+(18, 6, 1),  -- HD Externo Seagate na Filial 1
+(22, 6, 2),  -- HD Externo Seagate na Filial 2
+
+(6, 7, 1),   -- Cadeira Gamer ThunderX3 na Filial 1
+(5, 7, 2),   -- Cadeira Gamer ThunderX3 na Filial 2
+
+(15, 8, 1),  -- Smartphone Samsung Galaxy A15 na Filial 1
+(15, 8, 2),  -- Smartphone Samsung Galaxy A15 na Filial 2
+
+(9, 9, 1),   -- Impressora HP na Filial 1
+(9, 9, 2),   -- Impressora HP na Filial 2
+
+(12, 10, 1), -- Roteador TP-Link na Filial 1
+(13, 10, 2); -- Roteador TP-Link na Filial 2
+
+select * from tbl_filial_produto;
+
+select * from tbl_cargo;
+
+UPDATE tbl_cargo SET nome = 'Vendedor' WHERE id_cargo = 8;
+
+select * from tbl_funcionario_cargo where id_cargo = 8;
+
+-- LISTAR FUNCIONÁRIOS COM SEUS CARGOS
+SELECT fc.id_cargo, fc.id_funcionario, f.nome funcionario, c.nome cargo
+	FROM tbl_funcionario_cargo fc JOIN tbl_funcionario f
+ON fc.id_funcionario = f.id_funcionario JOIN tbl_cargo c
+ON fc.id_cargo = c.id_cargo
+order by cargo;
+
+SELECT * FROM tbl_cliente;
+
+desc tbl_pedido;
+
+-- CADASTRAR/INSERIR UM NOVO PEDIDO
+INSERT INTO tbl_pedido (
+	data_pedido, total, forma_pagamento, informacoes, id_cliente, id_funcionario
+) VALUES (
+	current_date(), 0.0, 'DINHEIRO', null, 4, 19
+);
+
+-- CADASTRAR OS ITENS DO PEDIDO
+INSERT INTO tbl_itens (
+	quantidade, valor_unitario, total, id_produto, id_pedido
+) VALUES (
+	2, 1299.0, (quantidade * valor_unitario), 7, 1
+);
+
+INSERT INTO tbl_itens (quantidade, valor_unitario, total, id_produto, id_pedido) VALUES 
+(3, 249.9, (quantidade * valor_unitario), 3, 1),
+(4, 849.9, (quantidade * valor_unitario), 9, 1);
+
+desc tbl_itens;
+
+SELECT current_date();
+
+select * from tbl_pedido;
+select * from tbl_produto;
+select * from tbl_itens;
+select * from tbl_cliente;
+
+-- TOTAL DO PEDIDO 1
+select p.id_pedido, pr.nome produto, i.quantidade, i.valor_unitario, i.total, p.data_pedido, c.nome cliente, f.nome vendedor
+	from tbl_pedido p join tbl_cliente c
+on p.id_cliente = c.id_cliente join tbl_funcionario f
+on p.id_funcionario = f.id_funcionario join tbl_itens i
+on p.id_pedido = i.id_pedido join tbl_produto pr
+on i.id_produto = pr.id_produto;
+
+select id_pedido, sum(total) total_pedido from tbl_itens;
+
 
 
 
