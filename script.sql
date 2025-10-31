@@ -138,9 +138,25 @@ CREATE TABLE tbl_produto(
     unidade varchar(20) not null
 );
 
+CREATE TABLE tbl_itens(
+    id_item int primary key auto_increment,
+    quantidade decimal(11,2) not null,
+    valor_unitario decimal(11,2) not null,
+    total decimal(11,2) not null,
+    id_produto int not null,
+    id_pedido int not null,
+    foreign key (id_produto) references tbl_produto(id_produto),
+    foreign key (id_pedido) references tbl_pedido(id_pedido)
+);
 
-
-
+CREATE TABLE tbl_filial_produto (
+    id int primary key auto_increment,
+    quantidade decimal(11,2) not null,
+    id_produto int not null,
+    id_filial int not null,
+    foreign key (id_produto) references tbl_produto(id_produto),
+    foreign key (id_filial) references tbl_filial(id_filial)
+);
 
 
 
