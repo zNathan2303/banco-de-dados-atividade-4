@@ -636,20 +636,141 @@ on i.id_produto = pr.id_produto;
 
 select id_pedido, sum(total) total_pedido from tbl_itens;
 
+select * from tbl_pedido;
+select * from tbl_cliente;
+select * from tbl_produto;
+select * from tbl_itens where id_pedido = 11;
+select * from tbl_funcionario_cargo;
+select * from tbl_cargo;
+
+delete from tbl_itens where id_pedido = 11;
 
 
+-- 29 e 19 são vendedores
 
+-- CRIAR UM PEDIDO
+INSERT INTO tbl_pedido (
+	data_pedido, total, forma_pagamento, id_cliente, id_funcionario
+) VALUES (
+	current_date(), 0.0, 'CARTÃO', 5, 19
+);
 
+-- FORNECER OS ITENS DO PEDIDO 2
+INSERT INTO tbl_itens (
+	quantidade, valor_unitario, total, id_produto, id_pedido
+) VALUES (
+	1, 3500, (quantidade * valor_unitario), 1, 11
+);
 
+/*
+	CRIAR UMA TRIGGER (GATILHO) QUE SERÁ DISPARADO
+    TODA VEZ QUE UM NOVO ITEM FOR CADASTRADO PARA UM PEDIDO
+    ESSA TRIGGER DEVERÁ ATUALIZAR O VALOR TOTAL DO PEDIDO
+    NA TABELA TBL_PEDIDO
+*/
 
+DELIMITER $$
+CREATE TRIGGER trg_atualiza_total_pedido_insert
+AFTER INSERT ON tbl_itens
+FOR EACH ROW
+BEGIN
+	DECLARE total_pedido DECIMAL(11,2);
+    
+    -- somamos o total dos itens do pedido
+    -- guardamos na variavel total_pedido
+    SELECT
+		SUM(total)
+	-- insere na variável criada
+	INTO
+		total_pedido
+	FROM
+		tbl_itens
+	WHERE
+		-- quando um usuário se conecta no banco de dados
+        -- é iniciada uma sessão individual para ele, e
+        -- essa sessão pode ser acessada pelo NEW
+		id_pedido = NEW.id_pedido;
+        
+	-- em seguida, atualizamos o total da tabela tbl_pedido
+    -- com o total dos itens obtidos
+    UPDATE
+		tbl_pedido
+	SET
+		total = total_pedido
+	WHERE
+		id_pedido = NEW.id_pedido;
+END$$
+DELIMITER ;
 
+/*
+	CRIAR UMA TRIGGER (GATILHO) QUE SERÁ DISPARADO
+    TODA VEZ QUE UM NOVO ITEM FOR EXCLUIDO PARA UM PEDIDO
+    ESSA TRIGGER DEVERÁ ATUALIZAR O VALOR TOTAL DO PEDIDO
+    NA TABELA TBL_PEDIDO
+*/
 
+DELIMITER $$
+CREATE TRIGGER trg_atualiza_total_pedido_delete
+AFTER DELETE ON tbl_itens
+FOR EACH ROW
+BEGIN
+	DECLARE total_pedido DECIMAL(11,2);
+    
+    -- somamos o total dos itens do pedido
+    -- guardamos na variavel total_pedido
+    SELECT
+		IFNULL(SUM(total), 0.0)
+	-- insere na variável criada
+	INTO
+		total_pedido
+	FROM
+		tbl_itens
+	WHERE
+		-- quando um usuário se conecta no banco de dados
+        -- é iniciada uma sessão individual para ele, e
+        -- essa sessão pode ser acessada pelo NEW
+		id_pedido = OLD.id_pedido;
+        
+		-- em seguida, atualizamos o total da tabela tbl_pedido
+		-- com o total dos itens obtidos
+		UPDATE
+			tbl_pedido
+		SET
+			total = total_pedido
+		WHERE
+			id_pedido = OLD.id_pedido;
+END$$
+DELIMITER ;
 
+select * from tbl_pedido;
+select * from tbl_itens;
+delete from tbl_itens where id_item = 6;
+select * from tbl_pedido;
 
+select * from tbl_itens;
 
+SET AUTOCOMMIT = OFF;
 
+-- ANTES DE FAZER O INSERT DO CLIENTE, VERIFICAR SE O EMAIL POSSUI LETRA MAIUSCULA
 
+DELIMITER $$
+CREATE TRIGGER trg_email_minusculo_insert
+BEFORE INSERT ON tbl_cliente
+FOR EACH ROW
+BEGIN
+	SET NEW.email = lower(NEW.email);
+END$$
+DELIMITER ;
 
+desc tbl_cliente;
+
+insert into tbl_cliente (
+	nome, cpf, email
+) values (
+	"teste", "123123", "TeStE@GQMIl.Com"
+);
+
+select * from tbl_cliente;
 
 
 
