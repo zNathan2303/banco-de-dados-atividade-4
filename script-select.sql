@@ -772,12 +772,128 @@ insert into tbl_cliente (
 
 select * from tbl_cliente;
 
+select * from tbl_produto;
+    
+SELECT id_produto, nome, valor
+	FROM tbl_produto;
 
+-- MOSTRAR O VALOR MAIS ALTO DA TABELA DE PRODUTO
+SELECT id_produto, nome, MAX(valor)
+	FROM tbl_produto;
+    
+-- MOSTRAR O PRODUTO MAIS CARO
+SELECT id_produto, nome, valor
+	FROM tbl_produto
+    ORDER BY valor DESC 
+    LIMIT COUNT(MAX(valor));
 
+SELECT COUNT(valor)
+	FROM tbl_produto;
+    
+SELECT SUM(valor)
+	FROM tbl_produto;
+    
+    
+SELECT * FROM tbl_itens;
 
+SELECT * FROM tbl_itens
+	WHERE id_produto = 1;
 
+-- VER O TOTAL EM DINHEIRO DE MOUSES VENDIDOS
+SELECT SUM(total) 
+	FROM tbl_itens
+	WHERE id_produto = 1;
 
+-- QUANTOS TECLADOS MECANICOS (3) A LOJA JA VENDEU
+SELECT SUM(quantidade)
+	FROM tbl_itens
+    WHERE id_produto = 3;
+    
+-- QUANTO JA FATURAMOS NAS VENDAS DE TECLADO MECANICO
+SELECT SUM(total)
+	FROM tbl_itens
+    WHERE id_produto = 3;
 
+SELECT * FROM tbl_pedido;
+
+SELECT SUM(total) FROM tbl_pedido
+	WHERE id_funcionario = 19;
+
+select * from tbl_funcionario;
+SELECT * FROM tbl_funcionario_cargo;
+SELECT * FROM tbl_cargo;
+
+-- CRIAR UM PEDIDO PARA O VENDEDOR 29
+INSERT INTO tbl_pedido (
+	data_pedido, total, forma_pagamento, id_cliente, id_funcionario
+) VALUES (
+	current_date(), 0, "A vista", 1, 29
+);
+
+-- ADICIONAR OS ITENS DO PEDIDO
+INSERT INTO tbl_itens (
+	quantidade, valor_unitario, total, id_produto, id_pedido
+) VALUES (
+	3, 749,(quantidade * valor_unitario), 4, 12
+);
+
+INSERT INTO tbl_itens (
+	quantidade, valor_unitario, total, id_produto, id_pedido
+) VALUES (
+	4, 250,(quantidade * valor_unitario), 10, 12
+);
+
+INSERT INTO tbl_itens (
+	quantidade, valor_unitario, total, id_produto, id_pedido
+) VALUES (
+	4, 1200,(quantidade * valor_unitario), 7, 12
+);
+
+SELECT * FROM tbl_itens;
+SELECT * FROM tbl_produto;
+SELECT * FROM tbl_pedido;
+
+-- QUAL O VALOR TOTAL DO PEDIDO 1?
+SELECT SUM(total) from tbl_itens where id_pedido = 1;
+
+-- ATUALIZAR O TOTAL DO PEDIDO 1
+UPDATE tbl_pedido 
+	SET total = (
+		SELECT SUM(total) from tbl_itens where id_pedido = 11
+    )
+    WHERE id_pedido = 11;
+
+-- TOTAL DE VENDAS ($) POR PRODUTO
+SELECT i.id_produto, p.nome, SUM(i.total) total_vendido, SUM(i.quantidade) quantidade_vendida
+	FROM tbl_itens i JOIN tbl_produto p
+    ON i.id_produto = p.id_produto
+GROUP BY i.id_produto;
+
+-- EXIBIR TOTAL DE VENDAS POR VENDEDOR
+SELECT p.id_funcionario, f.nome, SUM(p.total) total_vendas, (SUM(p.total) * 12/100) comissao
+	FROM tbl_pedido p JOIN tbl_funcionario f
+    ON p.id_funcionario = f.id_funcionario
+group by p.id_funcionario;
+
+-- LISTAR TODOS OS FUNCIONARIOS QUE NUNCA EFETUARAM VENDAS
+SELECT 
+	f.id_funcionario, f.nome, p.id_pedido
+	FROM 
+		tbl_pedido p RIGHT JOIN tbl_funcionario f
+    ON 
+		p.id_funcionario = f.id_funcionario
+	WHERE
+		p.id_pedido IS NULL;
+
+select * from tbl_funcionario_cargo;
+select * from tbl_pedido;
+
+-- QUERO A LISTA DOS PRODUTOS NUNCA VENDIDOS
+SELECT p.id_produto, p.nome, i.id_pedido
+	FROM tbl_produto p LEFT JOIN tbl_itens i
+    ON i.id_produto = p.id_produto WHERE i.id_pedido IS NULL;
+
+SELECT * FROM tbl_itens;
 
 
 
