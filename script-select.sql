@@ -895,5 +895,63 @@ SELECT p.id_produto, p.nome, i.id_pedido
 
 SELECT * FROM tbl_itens;
 
+desc tbl_funcionario;
+
+-- PROCEDURE PARA LISTAR FUNCIONARIOS
+DELIMITER $$
+CREATE PROCEDURE ListarFuncionarios()
+BEGIN
+	SELECT 
+		id_funcionario, nome, cpf, email
+    FROM 
+		tbl_funcionario
+    ORDER BY 
+		nome ASC;
+END $$
+DELIMITER ;
+
+DROP PROCEDURE ListarFuncionarios;
+
+CALL ListarFuncionarios();
+
+DESC tbl_produto;
+-- PROCEDURE PARA EXCLUIR UM PRODUTO PELO ID
+DELIMITER $$
+CREATE PROCEDURE ExcluirProduto(
+	IN p_id INT
+)
+BEGIN
+	DECLARE id_existe INT;
+    
+    -- BUSCAR PELO PRODUTO INFORMADO
+    SELECT COUNT(id_produto) INTO id_existe
+    FROM tbl_produto
+    WHERE id_produto = p_id;
+    
+    -- LÓGICA CONDICIONAL PARA DETERMINAR SE O EXECUTA A EXCLUSÃO
+    IF id_existe > 0 THEN
+		DELETE FROM tbl_produto 
+        WHERE id_produto = p_id;
+	ELSE 
+		SELECT CONCAT("O produto com id ", p_id, " não existe!") MENSAGEM;
+	END IF;
+END $$
+DELIMITER ;
+
+SELECT * FROM tbl_produto;
+
+CALL ExcluirProduto(110);
+
+
+
+
+
+
+
+
+
+
+
+
 
 
